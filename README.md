@@ -1,8 +1,25 @@
-# GoZip
+# GoZIP
 
 
-Based on: https://tools.ietf.org/html/rfc1951
+Utility top zip/unzip gzip-files
+Only unzip is implemented so far.
+It's messy, but it works. 
 
-// https://www.infinitepartitions.com/art001.html
-// https://tools.ietf.org/html/rfc1952
-// https://tools.ietf.org/html/rfc1951#section-3.2
+
+### Usage:
+zip:
+```
+$ gobase64 <file>
+```
+unzip:
+```
+$ gobase64 -d <file>
+```
+
+If no file is provided, it will read from stdin.
+
+
+Based on:
+- https://tools.ietf.org/html/rfc1952
+- https://tools.ietf.org/html/rfc1951
+- https://www.infinitepartitions.com/art001.html
