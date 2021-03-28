@@ -61,7 +61,7 @@ func testDecompress(zipPath, truthPath string, t *testing.T) {
 }
 
 func TestDecompress(t *testing.T) {
-	// testDecompress("testdata/short.txt.gz", "testdata/short.txt", t)
-	// testDecompress("testdata/repeat.txt.gz", "testdata/repeat.txt", t)
+	testDecompress("testdata/short.txt.gz", "testdata/short.txt", t)
+	testDecompress("testdata/repeat.txt.gz", "testdata/repeat.txt", t)
 	testDecompress("testdata/loremIpsum.txt.gz", "testdata/loremIpsum.txt", t)
 }
