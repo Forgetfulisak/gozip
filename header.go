@@ -40,7 +40,6 @@ func NewGHeader(r *bufio.Reader) (*GHeader, error) {
 	var time [4]byte
 	data := make([]byte, 10)
 
-	// headerBuff := make([]byte, 10)
 	n, err := r.Read(data)
 	if err != nil {
 		return nil, err
@@ -126,7 +125,7 @@ func parseComment(in *bufio.Reader) (*FComment, error) {
 }
 
 func skipFExtra(in *bufio.Reader) error {
-	return errors.New("i'm wrong. xlen e to bytes")
+	return errors.New("FExtra-skip is wrong. xlen is two bytes")
 	// len, err := in.ReadByte()
 	// if err != nil {
 	// 	return err

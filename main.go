@@ -16,8 +16,8 @@ type Literal []byte
 
 const EndOfBlock = 256
 
-func writeBlock(in *BitReader, out io.Writer, decoder huffmanDecoder) error {
-	ring := NewRingBuffer(3 * 1024)
+func writeBlock(in *BitReader, out io.Writer, decoder *huffmanDecoder) error {
+	ring := NewRingBuffer(100 * 1024)
 	buf := make([]byte, 2)
 
 	writer := io.MultiWriter(out, ring)
@@ -32,6 +32,7 @@ func writeBlock(in *BitReader, out io.Writer, decoder huffmanDecoder) error {
 
 			binary.BigEndian.PutUint16(buf, uint16(val))
 			writer.Write(buf[1:])
+			// fmt.Println("written")
 		} else if val == 256 {
 			// fmt.Println("\n\nVal == 256, breaking")
 			break
@@ -67,8 +68,12 @@ func writeBlock(in *BitReader, out io.Writer, decoder huffmanDecoder) error {
 }
 
 func writeDynamicBlock(in *BitReader, out io.Writer) error {
-	decoder := createDynamicHuffman(in)
+	decoder, err := createDynamicHuffman(in)
+	if err != nil {
+		return err
+	}
 	return writeBlock(in, out, decoder)
+	// return errors.New("writeDynamicBlock not implemented")
 
 }
 
@@ -109,9 +114,10 @@ func decompressBlock(in *BitReader, out io.Writer) (bool, error) {
 	}
 
 	bHeader := NewBlockHeader(byte(header))
-	fmt.Println("Header", bHeader.Bfinal, bHeader.BType)
 	switch bHeader.BType {
 	case blockNoCompression:
+		// TODO: Test
+		// Couldn't get gzip to create uncompressed block
 		err = writeUncompressedBlock(in, out)
 	case blockFixed:
 		err = writeFixedBlock(in, out)
