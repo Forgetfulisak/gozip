@@ -1,7 +1,7 @@
 # GoZIP
 
 
-Utility top zip/unzip gzip-files
+Utility to zip/unzip gzip-files
 Only unzip is implemented so far.
 It's messy, but it works. 
 
