@@ -9,11 +9,11 @@ It's messy, but it works.
 ### Usage:
 zip:
 ```
-$ gobase64 <file>
+$ gozip <file>
 ```
 unzip:
 ```
-$ gobase64 -d <file>
+$ gozip -d <file>
 ```
 
 If no file is provided, it will read from stdin.
