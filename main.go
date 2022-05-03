@@ -19,8 +19,6 @@ const EndOfBlock = 256
 func writeBlock(in *BitReader, out io.Writer, decoder *huffmanDecoder, lookBackBuffer *RingBuffer) error {
 	buf := make([]byte, 2)
 
-	writer := io.MultiWriter(out, lookBackBuffer)
-
 	for {
 		val, err := decoder.decodeLiteral(in)
 		if err != nil {
@@ -30,7 +28,7 @@ func writeBlock(in *BitReader, out io.Writer, decoder *huffmanDecoder, lookBackB
 		if val < 256 {
 
 			binary.BigEndian.PutUint16(buf, uint16(val))
-			writer.Write(buf[1:])
+			out.Write(buf[1:])
 			// fmt.Println("written", val, buf[1:], buf)
 		} else if val == 256 {
 			// fmt.Println("\n\nVal == 256, breaking")
@@ -67,7 +65,7 @@ func writeBlock(in *BitReader, out io.Writer, decoder *huffmanDecoder, lookBackB
 					return err
 				}
 
-				writer.Write(data)
+				out.Write(data)
 			}
 
 		}
@@ -148,6 +146,8 @@ func decompress(in io.Reader, out io.Writer) error {
 
 	lookBackBuffer := NewRingBuffer(32 * 1024)
 
+	writer := io.MultiWriter(out, lookBackBuffer)
+
 	_, err := NewGHeader(r)
 	if err != nil {
 		return err
@@ -155,7 +155,7 @@ func decompress(in io.Reader, out io.Writer) error {
 	bitReader := NewBitReader(r)
 	final := false
 	for !final {
-		final, err = decompressBlock(bitReader, out, lookBackBuffer)
+		final, err = decompressBlock(bitReader, writer, lookBackBuffer)
 		if err != nil {
 			return err
 		}
