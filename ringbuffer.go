@@ -6,8 +6,8 @@ import (
 
 type RingBuffer struct {
 	buf  []byte
-	pos  int
-	size int
+	pos  int // current pos in buf
+	size int // len(buf)
 }
 
 func NewRingBuffer(size int) *RingBuffer {
@@ -24,6 +24,7 @@ func (r *RingBuffer) Write(p []byte) (n int, err error) {
 		r.buf[r.pos] = b
 		r.pos = (r.pos + 1) % r.size
 	}
+
 	return len(p), nil
 }
 
@@ -31,6 +32,7 @@ func (r *RingBuffer) LookBack(dist, len int) ([]byte, error) {
 	if dist > r.size {
 		return nil, errors.New("dist larger than buffersize")
 	}
+
 	out := make([]byte, len)
 
 	curPos := (r.pos - dist) % r.size

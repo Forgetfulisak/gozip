@@ -61,7 +61,10 @@ func NewGHeader(r *bufio.Reader) (*GHeader, error) {
 	}
 
 	if header.FExtra() {
-		skipFExtra(r)
+		err = skipFExtra(r)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if header.FName() {
 		name, err := parseName(r)
@@ -84,7 +87,6 @@ func NewGHeader(r *bufio.Reader) (*GHeader, error) {
 		}
 		header.crc16 = &CRC16{b}
 	}
-
 	return header, nil
 }
 
