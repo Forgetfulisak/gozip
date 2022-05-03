@@ -64,10 +64,11 @@ func (r *BitReader) ReadNBit(n int) (int, error) {
 func (r *BitReader) EndByte() {
 	r.offset = 8
 }
+
+// Reads the next byte. Skips to the next byte-boundary
+// https://datatracker.ietf.org/doc/html/rfc1951#page-11 3.2.4
 func (r *BitReader) Read(p []byte) (n int, err error) {
-	if r.offset != 0 && r.offset != 8 {
-		return 0, errors.New("can only do read on byte-boundary")
-	}
+
 	for i := 0; i < len(p); i++ {
 		b, err := r.reader.ReadByte()
 		if err != nil {
@@ -75,5 +76,7 @@ func (r *BitReader) Read(p []byte) (n int, err error) {
 		}
 		p[i] = b
 	}
+
+	r.offset = 0
 	return len(p), nil
 }
