@@ -1,20 +1,19 @@
 package main
 
 import (
+	"bufio"
 	"errors"
-	"io"
 	"log"
 )
 
 // Stolen from here: https://play.golang.org/p/Wyr_K9YAro
-
 type BitReader struct {
-	reader io.ByteReader
+	reader *bufio.Reader
 	byte   byte
 	offset byte
 }
 
-func NewBitReader(r io.ByteReader) *BitReader {
+func NewBitReader(r *bufio.Reader) *BitReader {
 	return &BitReader{r, 0, 0}
 }
 
@@ -68,15 +67,6 @@ func (r *BitReader) EndByte() {
 // Reads the next byte. Skips to the next byte-boundary
 // https://datatracker.ietf.org/doc/html/rfc1951#page-11 3.2.4
 func (r *BitReader) Read(p []byte) (n int, err error) {
-
-	for i := 0; i < len(p); i++ {
-		b, err := r.reader.ReadByte()
-		if err != nil {
-			return i, err
-		}
-		p[i] = b
-	}
-
 	r.offset = 0
-	return len(p), nil
+	return r.reader.Read(p)
 }
