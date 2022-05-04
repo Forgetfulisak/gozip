@@ -3,8 +3,13 @@
 
 Utility to zip/unzip gzip-files
 Only unzip is implemented so far.
-It's messy, but it works. 
+It's messy and slow, but it works! 
 
+
+### Installation
+```
+go install github.com/forgetfulisak/gozip@latest
+```
 
 ### Usage:
 zip:
